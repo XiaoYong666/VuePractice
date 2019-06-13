@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vue常用的指令</title>
+    <link href="/css/weuix.min.css" rel="stylesheet">
+    <script src="/js/vue.js"></script><!--此处也可以引入CDN-->
+    <script src="/js/zepto.min.js"></script>
+    <script src="/js/zepto.weui.min.js"></script>
+</head>
+<body>
+    <div id="app">
+            <h4 v-if="isShow"> Vue 指令：v-if的用法</h4>
+
+            <a v-bind:href="url">Vue指令：v-bind用法</a>
+    </div>
+    <script>
+    var app=new Vue({
+        el:'#app',
+        data:{
+            isShow:true,
+            url:"https://www.baidu.com",
+            
+        }
+    })
+    </script>
+</body>
+</html>

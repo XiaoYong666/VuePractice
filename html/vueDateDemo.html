@@ -43,9 +43,12 @@
             },
             mounted: function () { //一般第一个业务从这里开始 生命周期一部分
                 var _this = this;
+                $.showLoading('循环5秒更新');
                 this.timer = setInterval(function () {
+                     $.hideLoading();
                     _this.date = new Date(); //修改数据Date
-                }, 1000);
+                    $.toast('更新完成');
+                }, 5000);
             },
             beforeDestroy: function () {
                 if (this.timer) {
