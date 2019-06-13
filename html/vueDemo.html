@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>第一个Vue实例</title>
+    <link href="/css/weuix.min.css" rel="stylesheet">
+    <script src="/js/vue.js"></script>
+    <script src="/js/zepto.min.js"></script>
+    <script src="/js/zepto.weui.min.js"></script>
+</head>
+<body>
+    <h1 id="element-one">初识Vue.js</h1>
+    <div id="app">
+        <h2>编辑姓名:<input type="text" v-model="Name"></h2>
+        <h2>姓名：{{Name}}</h2>
+        <h2>年龄：{{Age}}</h2>
+        <h2>学校:{{School}}</h2>
+    </div>
+</body>
+</html>
+<script>
+//例1
+ var data={
+     Name:'小明',
+     Age:19,
+     School:'光明小学',
+ }
+
+ //ViewModel
+ var vue=new Vue({
+     el:'#app',
+     data:data,
+ })
+
+ 
+ $(function(){
+    // $.toast();
+ })
+</script>
