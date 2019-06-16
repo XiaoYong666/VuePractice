@@ -1,41 +1,194 @@
 <!DOCTYPE html>
 <html lang="cn">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>第一个Vue实例</title>
     <link href="/css/weuix.min.css" rel="stylesheet">
-    <script src="/js/vue.js"></script><!--此处也可以引入CDN-->
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <script src="/js/vue.js"></script>
+    <!--此处也可以引入CDN-->
     <script src="/js/zepto.min.js"></script>
     <script src="/js/zepto.weui.min.js"></script>
+    <style>
+        .cursor {
+            cursor: pointer;
+        }
+
+        .red {
+            color: red;
+        }
+    </style>
 </head>
+
 <body>
     <h1 id="element-one">初识Vue.js</h1>
     <div id="app">
         <h2>编辑姓名:<input type="text" v-model="Name"></h2>
         <h2>姓名：{{Name}}</h2>
         <h2>年龄：{{Age}}</h2>
-        <h2>学校:{{School}}</h2>
+        <h2 @click="Change" class="cursor" :class="{'red':isShow}">学校:{{School}}</h2>
+
+        <template v-if="status===1">
+            <p>这是一段模板文本渲染</p>
+            <p>这是一段模板文本渲染</p>
+            <p>这是一段模板文本渲染</p>
+        </template>
+
+        <template v-if="type==='name'">
+            <label>
+                用户名:
+            </label>
+            <input placeholder="输入用户名">
+        </template>
+        <template v-else>
+            <label>邮箱：</label>
+            <input placeholder="输入邮箱">
+        </template>
+        <button @click="handleToggleClick">切换输入类型</button>
+
+
+        <p>列表普通渲染</p>
+        <ul>
+            <li v-for="(book,index) of books">{{index}} - {{book.name}}}</li>
+        </ul>
+
+        <br />
+        <p>列表的模板渲染</p>
+        <ul>
+            <template v-for="book in books">
+                <li>书名：{{book.name}}</li>
+                <li>作者:{{book.author}}</li>
+            </template>
+        </ul>
+
+        <p>遍历对象属性</p>
+        <span v-for="(value,key,index in user">{{index}}-{{key}}-{{value}}<br /></span>
+
+        <p>for 迭代整数</p>
+        <span v-for="n in 10">{{n}}</span>
+
+        <p>数组的过滤与排序</p>
+        <ul>
+            <template v-for="book in filterBooks">
+                <li>书名：{{book.name}}</li>
+                <li>作者:{{book.author}}</li>
+            </template>
+        </ul>
+
+        <p>方法与事件</p>
+        点击次数:{{count}}
+        <button @click="handleAdd()">+1</button>
+        <button @click="handleAdd(10)">+10</button>
+
+        <p>用Vue提供的特殊变量 $event访问原生Dom事件</p>
+        <a href="http://www.apple.com" @click="handleClick('禁止打开',$event)">打开链接</a>
     </div>
 </body>
+
 </html>
 <script>
-//例1
- var data={
-     Name:'小明',
-     Age:19,
-     School:'光明小学',
- }
+    //例1
+    var data = {
+        Name: '小明',
+        Age: 19,
+        School: '光明小学',
+        isShow: false,
+        status: 1,
+        type: 'name',
+        books: [{
+                name: '《Vue.js实战》',
+                author: '潇十一郎'
+            },
+            {
+                name: '《JavaScript语言精辟》',
+                author: 'Michael Zhang'
+            },
+            {
+                name: '测试的第三条数据',
+                author: 'Nicholas c.Zakas'
+            }
 
- //ViewModel
- var vue=new Vue({
-     el:'#app',
-     data:data,
- })
+        ],
+        user: {
+            one: 'Aresn',
+            two: '男',
+            three: 20
+        },
+        count: 0
+    }
 
- 
- $(function(){
-    // $.toast();
- })
+    //ViewModel
+    var vue = new Vue({
+        el: '#app',
+        data: data,
+        beforeCreate() {
+            console.info('我是：beforeCreate');
+        },
+        methods: {
+            Change: function () {
+                this.Age = 20;
+                this.Name = "潇十一郎";
+                this.isShow = true;
+            },
+            handleToggleClick: function () {
+                this.type = this.type === 'name' ? 'mail' : 'name';
+            },
+            handleAdd: function (count) {
+                count = count || 1;
+                this.count += count;
+            },
+            handleClick:function(message,event){
+                console.log(event);
+                event.preventDefault();
+                $.toast(message,'cancel');
+            }
+        },
+        computed: {
+            filterBooks: function () {
+                return this.books.filter(function (book) {
+                    return book.name.match(/JavaScript/);
+                })
+            },
+            sortedBooks: function () {
+                return this.books.sort(function (a, b) {
+                    return a.name.length < b.name.length;
+                })
+            }
+        },
+        created() {
+            console.info('我是：created');
+        },
+        beforeMount() {
+            console.info('我是：beforeMount');
+        },
+        mounted() {
+            console.info('我是：mounted', this.Name);
+        },
+        beforeUpdate() {
+            console.info('我是：beforeUpdate');
+        },
+        updated() {
+            console.info('我是：updated');
+        },
+        activated() {
+            console.info('我是：activated');
+        },
+        deactivated() {
+            console.info('我是：deactivated');
+        },
+        beforeDestroy() {
+            console.info('我是：beforeDestroy')
+        }
+    })
+    // app.books.push({
+    //     name:'css揭秘',
+    //     author:'test',
+    // });
+
+    $(function () {
+        // $.toast();
+    })
 </script>
