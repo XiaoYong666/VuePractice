@@ -47,6 +47,9 @@ checkAll:false,
        },
        allCheck:function(){
            this.checkAll=true;
+       },
+       handleCheckChoose:function(index){
+           console.log(index);
        }
 
     }

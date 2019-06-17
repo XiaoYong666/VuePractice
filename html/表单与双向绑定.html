@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>双向绑定</title>
+    <link href="/css/weuix.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <!--此处也可以引入CDN-->
+    <script src="/js/zepto.min.js"></script>
+    <script src="/js/zepto.weui.min.js"></script>
+</head>
+<body>
+<div id="app">
+    <input type="text" v-model.lazy="message">
+    <p>{{message}}</p>
+
+
+    <select v-model="selected">
+        <option :value="{number:123}">123</option>
+    </select>
+
+    {{selected.number}}
+
+
+    <input type="number" v-model.number="number">
+    <p>{{typeof number}}</p>
+
+
+    <input type="text" v-model.trim="dataShow">
+    <p>{{dataShow}}</p>
+</div>
+
+    <script src="/js/vue.js"></script>
+    <script>
+    var app=new Vue({
+        el:'#app',
+        data:{
+            message:'',
+            selected:'',
+            number:123,
+            dataShow:' 123  456  '
+        }
+    })
+    </script>
+</body>
+</html>
