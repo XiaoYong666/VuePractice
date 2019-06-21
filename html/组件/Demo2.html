@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>组件的使用2</title>
+    <link href="/css/weuix.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <!--此处也可以引入CDN-->
+
+    <script src="/js/zepto.min.js"></script>
+    <script src="/js/zepto.weui.min.js"></script>
+</head>
+
+<body>
+
+    <div id="app">
+        <button>{{totalCounter}}</button>
+        <br>
+        <button-counter v-on:increment-event="total_increment"></button-counter>
+        <button-counter v-on:increment-event="total_increment"></button-counter>
+
+    </div>
+    <script src="/js/vue.js"></script>
+    <script>
+        Vue.component('button-counter', {
+            template: '<button v-on:click="increment">{{counter}}</button>',
+            data: function () {
+                return {
+                    counter: 0
+                }
+            },
+            methods: {
+                increment: function () {
+                    this.counter += 1;
+                    this.$emit('increment-event');//触发一个自定义事件
+                }
+            }
+        })
+        var app = new Vue({
+            el: '#app',
+            data: {
+                totalCounter: 0
+            },
+            methods: {
+                total_increment: function () {
+                    this.totalCounter += 1
+                }
+            }
+        })
+    </script>
+
+</body>
+
+</html>

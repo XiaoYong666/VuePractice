@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>组件的基础</title>
+    <link href="/css/weuix.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <!--此处也可以引入CDN-->
+
+    <script src="/js/zepto.min.js"></script>
+    <script src="/js/zepto.weui.min.js"></script>
+
+</head>
+
+<body>
+    <div id="components-demo">
+        <button-counter></button-counter>
+        <button-counter></button-counter>
+        <button-counter></button-counter>
+        <div :style="{fontSize:postFontSize+'em'}">
+            <!-- 给组件自定事件 v-on:enlarge-text 模板中通过$emit函数触发-->
+            <blog-post v-on:enlarge-text="onEnlargeText" v-for="post in posts" :key="post.id" :post="post"></blog-post>
+        </div>
+
+        <br />
+        <p>自定义input组件</p>
+        <custom-input v-model="searchText"></custom-input>
+        <br />
+        <label>{{searchText}}</label>
+
+
+        <alert-box></alert-box>
+        <body-content>
+            <div class="header" slot="header">header</div>
+            <div class="content" slot="content">content</div>
+            <div class="footer" slot="footer">footer</div>
+        </body-content>
+    </div>
+
+
+    <script src="/js/vue.js"></script>
+    <script>
+        //使用全局 的方式注册一个组件
+        Vue.component('button-counter', {
+            data: function () {
+                return {
+                    count: 0,
+                    isShow: true,
+                }
+            },
+            template: '<button v-on:click="count++" :class="testColor" v-if="isShow">You clicked me {{count}} times.</button>',
+            computed: {
+                testColor: function () {
+                    if (this.count >= 3 && this.count <= 5) {
+                        return {
+                            red: true
+                        }
+                    } else if (this.count > 5 && this.count <= 10) {
+                        return {
+                            red: false,
+                            green: true,
+                        }
+                    } else if (this.count >= 10) {
+                        this.isShow = false;
+                    } else {
+                        return {
+                            red: false,
+                            green: false,
+                        }
+                    }
+                }
+            }
+        })
+
+        Vue.component('blog-post', {
+            props: ['post', 'postFontSize'],
+            data() {
+                return {
+                    isShowtextPosition: {
+                        textPosition: true
+                    }
+                }
+            },
+            template: `
+                <div class="blog-post">
+                    <h3>{{ post.title }}</h3>
+                    <button v-on:click="$emit('enlarge-text',0.1)">Enlarge Text</button> 
+                    <div v-html="post.content"></div>
+                    <div :class="isShowtextPosition">{{post.datetime}}</div>
+                </div>
+            `,
+            computed: {
+                // textPosition:function(){
+                //     return {
+                //         sPosition:true,
+                //     }
+                // }
+            }
+        })
+
+        Vue.component('custom-input', {
+            props: ['value'],
+            template: `
+        <input :value="value" v-on:input="$emit('input',$event.target.value)">
+        `
+        })
+
+        //顶部提示组件
+        Vue.component('alert-box', {
+            template: `
+            <div class="demo-alert-box">
+            <strong>Error!</strong>
+            <slot></slot>
+            </div>
+            `
+        })
+
+        //多卡槽
+        Vue.component('body-content', {
+            props: {
+                content: String
+            },
+            template: `
+              <div>
+              <slot name="header"></slot>
+              <slot name="content"></slot>
+              <slot name="footer"></slot>
+              </div>
+            `
+        })
+
+        new Vue({
+            el: '#components-demo',
+            data: {
+                posts: [{
+                        id: 1,
+                        title: '第一个标题',
+                        content: '这是测试内容',
+                        datetime: '2019-06-21 9:15'
+                    },
+                    {
+                        id: 2,
+                        title: '第二个标题',
+                        content: '阿斯顿发斯蒂芬',
+                        datetime: '2019-06-21 15:15'
+                    },
+                    {
+                        id: 3,
+                        title: '第三个标题',
+                        content: '沃尔沃二翁',
+                        datetime: '2019-06-21 18:15'
+                    }
+                ],
+                postFontSize: 1,
+                searchText: '1213'
+            },
+            methods: {
+                onEnlargeText: function (enlargeAmount) {
+                    this.postFontSize += enlargeAmount
+                }
+            }
+
+        })
+    </script>
+
+    <style>
+        .red {
+            color: red;
+        }
+
+        .green {
+            color: green;
+        }
+
+        .textPosition {
+            text-align: right;
+            margin-right: 20px;
+            font-size: 13px;
+        }
+    </style>
+</body>
+
+</html>
